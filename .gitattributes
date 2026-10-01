@@ -1,0 +1,5 @@
+# Binaries and images -- never apply line-ending conversion to these.
+*.lib binary
+*.dll binary
+*.exe binary
+*.png binary

@@ -1,0 +1,52 @@
+# =====================================================================
+#  zplot —— 上传策略
+#
+#   上传  : include/（公开头）、src/（图表+指标源码，MIT 全开源）、
+#          demo/、tools/、docs/
+#   不上传: ctp/（CTP 封装，闭源，闲鱼私聊提供）、third_party/（CTP SDK）、
+#          lib/（构建产物）、本地其它工程
+# =====================================================================
+
+# ---- CTP 封装：闭源，不进仓库，需开发者到闲鱼联系作者免费提供 ----
+/ctp/
+
+# ---- CTP SDK 副本：官方分发包，自行获取（版本见 README） ----
+/third_party/
+
+# ---- 与 zplot 无关的本地工程 ----
+/Futures_py/
+
+# ---- 构建产物（仓库零二进制：lib 与 obj 都不提交） ----
+/lib/
+/build/
+/demo/build/
+*.obj
+*.pdb
+*.ilk
+*.exp
+*.idb
+*.recipe
+*.tlog
+*.log
+*.con
+
+# ---- Visual Studio ----
+.vs/
+*.user
+*.suo
+*.ncb
+*.sdf
+*.opensdf
+*.vcxproj.user
+*.sln.docstates
+
+# ---- 内部工作笔记（含中文验证记录，不属于交付物） ----
+/tools/data/数据.md
+/tools/data/文华验证公式.txt
+/tools/data/*_wh*.csv
+
+# ---- 杂项 ----
+*.bak
+*.tmp
+Thumbs.db
+Desktop.ini
