@@ -1,5 +1,11 @@
 # 指标清单与文华对账
 
+> **Note (English):** this document is written in Chinese on purpose — it is the
+> comparison sheet against **WenHua (文华 wh6)** and **TDX (通达信)**, the trading
+> terminals Chinese traders use, whose formulas only exist in Chinese software.
+> It lists all 59 indicators with their parameters and the verified match results.
+> If you need a specific indicator documented in English, open an issue.
+
 zplot 内置 **59 个指标**（K 线形态另算），分三类。本文列出全部名字、关键默认参数，
 以及与文华 wh6 / 通达信同名指标的**口径对账结果**——这是判断「你的 KDJ 和文华的
 KDJ 对不对得上」的直接证据。
