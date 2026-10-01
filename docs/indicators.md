@@ -1,131 +1,140 @@
-# 指标清单与文华对账
+# Indicator reference & cross-check results
 
-> **Note (English):** this document is written in Chinese on purpose — it is the
-> comparison sheet against **WenHua (文华 wh6)** and **TDX (通达信)**, the trading
-> terminals Chinese traders use, whose formulas only exist in Chinese software.
-> It lists all 59 indicators with their parameters and the verified match results.
-> If you need a specific indicator documented in English, open an issue.
+> 中文版（文华 / 通达信对账）：[indicators.zh.md](indicators.zh.md)
 
-zplot 内置 **59 个指标**（K 线形态另算），分三类。本文列出全部名字、关键默认参数，
-以及与文华 wh6 / 通达信同名指标的**口径对账结果**——这是判断「你的 KDJ 和文华的
-KDJ 对不对得上」的直接证据。
+zplot ships **59 indicators** (candlestick styles counted separately) in three
+families. This document lists every name with its key default parameters, and
+the cross-check results against the same-name indicators of **WenHua wh6** and
+**TDX (通达信)** — the terminals used by Chinese futures traders, whose formulas
+only exist in Chinese software.
 
-> 指标通过 `name` 字符串分发（如 `ComputeOscillator(bars, "MACD", {12,26,9})`），
-> 参数个数不足会返回 `valid == false`，不抛异常。
+> Indicators are dispatched by `name` string, e.g.
+> `ComputeOscillator(bars, "MACD", {12,26,9})`. Too few parameters yields
+> `valid == false`; nothing throws.
 
-## 一、趋势指标（21 个）
+**Trademark note**: WenHua and TDX are named for identification purposes only
+and are trademarks of their respective owners. zplot is an independent
+implementation, not affiliated with, sponsored by, or endorsed by them. The
+indicator formulas are public-domain mathematics.
 
-| 名字 | 说明 | 默认参数 |
+## 1. Trend indicators (21)
+
+| Name | Description | Defaults |
 |---|---|---|
-| `MA` | 简单移动平均，每给一个周期出一条线 | 5 / 10 / 20 / 40 / 60 |
-| `EMA` | 指数移动平均，同上 | 5 / 10 / 20 / 40 / 60 |
-| `EMA2` | 指数移动平均（另一族，最多 5 条） | 5 / 10 / 20 / 40 / 60 |
-| `SMA` | 简单移动平均（另一族，最多 8 条） | 5 / 10 / 20 / 40 / 60 |
-| `TRMA` | 三重简单移动平均（最多 5 条） | — |
-| `TSMA` | 三重指数移动平均（最多 5 条） | — |
-| `BOLL` | 布林带：中轨 / 上轨 / 下轨三条 | 26 / 26 / 2 |
-| `BBlBOLL` | 中轨为 BBI 的布林带 | 10 / 3.0 |
-| `MA扩展` | 两条长周期均线 | 120 / 240 |
-| `PUBU` | 瀑布线：六条 `(EMA(C,m)+MA(C,2m)+MA(C,4m))/3` | m = 4/6/9/13/18/24 |
-| `SAR` / `SAR1` | 抛物线转向，两条点序列 | 起始 / 上限 / 步长 |
-| `HCL` | 高 / 收 / 低三重均线（各一条 MA） | 10 |
-| `MIKE` | MIKE 指标：WR/MR/SR/WS/MS/SS 六条 | 12 |
-| `BBI` | 多空指数：四条 SMA 等权合成一条 | 3 / 6 / 12 / 24 |
-| `DKX` | 多空线：加权中价再 MA 平滑 | 10 |
-| `CDP` | 逆势操作：CDP/NH/AH/NL/AL 五档 | 无参数 |
-| `唐奇安` | 唐奇安通道：上轨（高点）/ 下轨（低点） | 20 / 20 |
-| `ENV` | 包络线：SMA 上下加百分比 | 14 / 6.0 |
-| `SP` | 结算价曲线 | 忽略参数 |
-| `空` | 画空（不画任何东西，valid 仍为 true） | — |
+| `MA` | Simple moving average, one line per period given | 5 / 10 / 20 / 40 / 60 |
+| `EMA` | Exponential moving average, same scheme | 5 / 10 / 20 / 40 / 60 |
+| `EMA2` | Exponential family, up to 5 lines | 5 / 10 / 20 / 40 / 60 |
+| `SMA` | Simple family, up to 8 lines | 5 / 10 / 20 / 40 / 60 |
+| `TRMA` | Triple simple moving average (up to 5 lines) | — |
+| `TSMA` | Triple exponential moving average (up to 5 lines) | — |
+| `BOLL` | Bollinger bands: middle / upper / lower | 26 / 26 / 2 |
+| `BBlBOLL` | Bollinger bands with BBI as the middle band | 10 / 3.0 |
+| `MA扩展` | Two long-period moving averages (the name is the API string) | 120 / 240 |
+| `PUBU` | Waterfall lines: six `(EMA(C,m)+MA(C,2m)+MA(C,4m))/3` | m = 4/6/9/13/18/24 |
+| `SAR` / `SAR1` | Parabolic SAR, two dot series | start / cap / step |
+| `HCL` | One MA each on high / close / low | 10 |
+| `MIKE` | Six lines: WR / MR / SR / WS / MS / SS | 12 |
+| `BBI` | Bull-bear index: four equal-weight SMAs combined | 3 / 6 / 12 / 24 |
+| `DKX` | Bull-bear line: weighted mid price, then a MA of it | 10 |
+| `CDP` | Counter-trend levels: CDP / NH / AH / NL / AL | none |
+| `唐奇安` | Donchian channel (the name is the API string) | 20 / 20 |
+| `ENV` | Envelope: SMA widened by a percentage both sides | 14 / 6.0 |
+| `SP` | Settlement-price curve | params ignored |
+| `空` | Draw nothing; `valid` still true (the name is the API string) | — |
 
-## 二、摆动指标（24 个）
+## 2. Oscillator indicators (24)
 
-| 名字 | 说明 | 默认参数 |
+| Name | Description | Defaults |
 |---|---|---|
-| `MACD` | 指数平滑异同平均：DIF / DEA + 红绿柱 + 零轴 | 12 / 26 / 9 |
-| `KDJ` | 随机指标：K / D / J | 9 / 3 / 3 |
-| `KD` | 随机指标（两线版） | 9 / 3 / 3 |
-| `SLOWKD` | 慢速随机指标 | — |
-| `RSI` | 相对强弱 | 7 / 14 |
-| `WR` | 威廉指标 | 14 |
-| `ROC` | 变动率 | 12 / 6 |
-| `BIAS` | 乖离率（多线） | 6 / 12 / 24 |
-| `CCI` | 顺势指标 | 14 |
-| `CR` | 能量指标（多线） | 26 |
-| `ARBR` | 人气意愿：AR / BR | 26 |
-| `DMI` | 趋向指标：PDI / MDI / ADX / ADXR | 14 / 6 |
-| `ATR` | 真实波幅均值 | 26 |
-| `PSY` | 心理线 | — |
-| `MTM` | 动量指标 | — |
-| `DDI` | 方向标准离差指数（比值，见口径陷阱） | 13 / 30 / 10 / 5 |
-| `DMA` | 平均线差 | — |
-| `ADTM` | 动态买卖气（比值） | 23 / 8 |
-| `LON` | 长线（含成交量） | 10 |
-| `SHORT` | 短线（含成交量） | 5 |
-| `SRDM` | （比值） | — |
-| `MI` | 动量指数 | — |
-| `DPO` | 区间震荡线 | — |
-| `ASl` | 累计线（从首根 K 线累计，见口径陷阱） | — |
+| `MACD` | DIF / DEA lines + histogram + zero axis | 12 / 26 / 9 |
+| `KDJ` | Stochastic: K / D / J | 9 / 3 / 3 |
+| `KD` | Stochastic, two-line version | 9 / 3 / 3 |
+| `SLOWKD` | Slow stochastic | — |
+| `RSI` | Relative strength index | 7 / 14 |
+| `WR` | Williams %R | 14 |
+| `ROC` | Rate of change | 12 / 6 |
+| `BIAS` | Bias (multi-line) | 6 / 12 / 24 |
+| `CCI` | Commodity channel index | 14 |
+| `CR` | Energy index (multi-line) | 26 |
+| `ARBR` | Popularity / willingness: AR, BR | 26 |
+| `DMI` | PDI / MDI / ADX / ADXR | 14 / 6 |
+| `ATR` | Average true range | 26 |
+| `PSY` | Psychological line | — |
+| `MTM` | Momentum | — |
+| `DDI` | Directional deviation index (a ratio — see pitfalls) | 13 / 30 / 10 / 5 |
+| `DMA` | Difference of two moving averages | — |
+| `ADTM` | Dynamic buying/selling momentum (a ratio) | 23 / 8 |
+| `LON` | Long-line study (volume-based) | 10 |
+| `SHORT` | Short-line study (volume-based) | 5 |
+| `SRDM` | (a ratio) | — |
+| `MI` | Momentum index | — |
+| `DPO` | Detrended price oscillator | — |
+| `ASl` | Running total from the first bar (see pitfalls) | — |
 
-## 三、量仓指标（14 个）
+## 3. Volume / open-interest indicators (14)
 
-| 名字 | 说明 | 默认参数 |
+| Name | Description | Defaults |
 |---|---|---|
-| `CJL` | 成交量柱 + 两条量均线（基础成交量副图） | 5 / 10 |
-| `MV` | 两条递推平滑量线 | — |
-| `CCL` | 持仓量柱 + 持仓量均线 | — |
-| `OPI` | 持仓量**变化**柱（增仓红 / 减仓绿，本库自创） | — |
-| `OBV` | 能量潮（成交量累加） | 无参数 |
-| `VR` | 成交量比率 | — |
-| `AD` | 集散线（`((C-L)-(H-C))/(H-L)*VOL` 累加） | 无参数 |
-| `PVT` | 量价趋势（按涨跌幅加权累加） | 无参数 |
-| `WAD` | 威廉集散 | 无参数 |
-| `WVAD` | 威廉变异离散量（**逐根，不累加**） | 无参数 |
-| `VOSC` | 成交量震荡 | 短 / 长 |
-| `VROC` | 成交量变动率 | N |
-| `VRSI` | 成交量相对强弱 | N |
-| `价量运行趋势` | 价与量各一条均线，同步段打阴影 | 25 |
+| `CJL` | Volume bars + two volume MAs (the basic volume panel) | 5 / 10 |
+| `MV` | Two recursively smoothed volume lines | — |
+| `CCL` | Open-interest bars + an OI moving average | — |
+| `OPI` | Open-interest **change** bars (build red / unwind green; this library's own) | — |
+| `OBV` | On-balance volume | none |
+| `VR` | Volume ratio | — |
+| `AD` | Accumulation/distribution line (`((C-L)-(H-C))/(H-L)*VOL`, accumulated) | none |
+| `PVT` | Price-volume trend (return-weighted, accumulated) | none |
+| `WAD` | Williams accumulation/distribution | none |
+| `WVAD` | Williams variable AD (`(C-O)/(H-L)*VOL`, **per bar, not accumulated**) | none |
+| `VOSC` | Volume oscillator | short / long |
+| `VROC` | Volume rate of change | N |
+| `VRSI` | Volume RSI | N |
+| `价量运行趋势` | One MA on price, one on volume, sync stretches shaded (the name is the API string) | 25 |
 
 ---
 
-## 四、文华 wh6 对账结果
+## 4. Cross-check results (WenHua wh6)
 
-对账方法：把 zplot 的算法**原样写成文华公式**，让文华用**它自己的数据**去算，
-再和文华内置同名指标比。数据源不同导致的开/收价差 1 跳属于**数据因素**，与公式
-无关——所以看「同数据源下两条线是否重合」。
+**Method**: the zplot algorithms are rewritten verbatim as WenHua formulas and
+computed **by WenHua on its own data**, then compared with WenHua's built-in
+indicators of the same name. A 1-tick difference in open/close prices between
+data vendors is a **data factor**, not a formula error — so the comparison
+checks whether the two lines coincide on the same data source.
 
-**✅ 已实测对上（精确或接近）**
+**✅ Verified matching (exact or near-exact)**
 
-| 指标 | 状态 |
+| Indicator | Status |
 |---|---|
-| MACD | 精确 |
-| ROC | 精确 |
-| WR | 精确 |
-| BIAS | 精确 |
-| SRDM | 精确 |
-| DMI（MDI 线） | 精确 |
-| DMA | 接近 |
-| DPO | 接近 |
-| MI | 接近 |
-| CR（前四条线） | 接近 |
+| MACD | exact |
+| ROC | exact |
+| WR | exact |
+| BIAS | exact |
+| SRDM | exact |
+| DMI (MDI line) | exact |
+| DMA | near |
+| DPO | near |
+| MI | near |
+| CR (first four lines) | near |
 
-**⚠️ 公式已验证、数值差异来自数据源**
+**⚠️ Formula verified; numeric offset comes from the data source**
 
-这几类指标的数值偏差，是「天勤数据 vs 文华数据」在开/收价上差 1 跳造成的，
-**把算法写进文华用文华数据算即重合**，不是公式错误：
+For these, the numeric deviation is caused by the 1-tick open/close difference
+between data vendors. The algorithm pasted into WenHua reproduces the built-in
+lines exactly on the same data:
 
-ADTM、DDI、RSI、CCI、ARBR、LON、SHORT
+ADTM, DDI, RSI, CCI, ARBR, LON, SHORT
 
 ---
 
-## 五、口径陷阱（对账和移植时最常踩）
+## 5. Unit pitfalls (the usual porting traps)
 
-1. **比值 vs 百分比**：`DDI` / `SRDM` / `ADTM` 返回的是 `-1 ~ +1` 的**比值**，不是
-   百分比；而 `ROC` / `RSI` / `PSY` / `CCI` / `WR` / `BIAS` / `CR` / `ARBR` 才是
-   百分比。混了就会差 100 倍。
+1. **Ratio vs percentage**: `DDI` / `SRDM` / `ADTM` return a **ratio** in
+   `-1 ~ +1`, not a percentage; `ROC` / `RSI` / `PSY` / `CCI` / `WR` / `BIAS` /
+   `CR` / `ARBR` really are percentages. Mixing these up is a 100x error.
 
-2. **`ASl` 是从第一根 K 线累计**，起点不同会导致后面所有值整体平移。对比时务必让
-   两边加载同样的起始 K 线，否则只能比形态、不能比数值。
+2. **`ASl` accumulates from the first bar** — a different starting bar shifts
+   every following value. When comparing against other software, load the same
+   starting bar, or only the shape is comparable.
 
-3. **含成交量的指标看形态、别抠量纲**：`LON` / `SHORT` 里 `VOL` 的量纲若与对端
-   软件不同（手 vs 吨 vs 常数倍），数值整体差一个常数倍，曲线形状才是对的。
+3. **Volume-based studies: compare shape, not magnitude** — if the volume unit
+   differs (lots vs tonnes vs a constant factor), `LON` / `SHORT` scale by a
+   constant; the curve shape is what must match.
