@@ -16,7 +16,7 @@ no GLFW, no SDL, no Qt, no FreeType. The only third-party code anywhere is
 - **Charting + indicators**: stable, used in production by the author. 55+ indicators,
   matched item-by-item against the reference formulas of Chinese trading terminals.
 - **Demo**: complete and self-contained — builds and runs out of the box from a fresh clone.
-- **CTP wrapper**: **not in this repository** (see the Chinese section at the end).
+- **CTP wrapper**: **not in this repository** (distributed separately — see Custom work below).
 
 ---
 
@@ -172,40 +172,48 @@ The charting and indicator code in `include/` and `src/` is **MIT** — see
 
 ---
 
-# 中文说明：CTP 交易接口封装
+# Custom work / 定制服务
 
-**这个仓库里不含 CTP 封装 —— 图表与指标是开源的，CTP 那一层不开放。**
+**EN** — zplot is MIT and the free part stays free forever; issues and PRs are
+always welcome. Need something built on top of it — a K-line widget inside your
+app, indicators ported, a chart wired into your trading terminal? Two channels
+below.
 
-zplot 的图表 / 指标部分完全开源（MIT）。除此之外，作者另有一层对上期技术 CTP
-交易 / 行情接口的 C++ 封装，把 `CThostFtdcTraderApi` / `CThostFtdcMdApi` 的裸指针、
-回调与 GBK 字符串收进一个值语义的接口里（登录、结算单、报单、撤单、成交、持仓、
-行情订阅，以及自动 GBK → UTF-8）。**这层封装不随仓库发布，仅通过闲鱼提供。**
+**中文** —— zplot 的开源部分永远免费；issue 和 PR 永远欢迎。需要基于它做定制的
+话（把图表接进你的软件、移植指标、开发交易终端界面），走下面两个渠道。
 
-如果你需要 CTP 行情 / 交易对接，请到闲鱼联系作者，可以**免费提供**（封装好的
-预编译库 + 头文件 + 使用说明）：
+## 🧑‍💻 Fiverr — international clients
 
-> 闲鱼搜索 **`火山口小小的灯笼鱼`**，说明来意「zplot CTP 对接」即可。
+I take contract work on Fiverr: **custom K-line chart widgets**, **indicator
+porting** (Pine Script / 通达信 / 文华 → C++ / Python / MT5), and **C++ chart
+integration** into your trading terminal.
 
-这层封装基于 **CTP API v6.7.11**（x64，se 流，`20250617_traderapi64_se_windows`）。
-CTP 官方分发包（`thosttraderapi_se` / `thostmduserapi_se` 的 `.lib` 与 `.dll`）需要你
-自己向期货公司 / 上期技术获取，作者不代发。
+- Clear packages: **$150 / $400 / $1000**, delivery 3–10 days, in English
+- The engine is open source (MIT) — what you pay for is my time
 
----
+👉 [fiverr.com/zhangrenze/build-a-custom-kline-candlestick-chart-for-your-app](https://www.fiverr.com/zhangrenze/build-a-custom-kline-candlestick-chart-for-your-app)
 
-# Support & custom work / 定制服务
+*I build charting software; I do not give trading advice, signal
+recommendations, or strategy development. That is a legal line, not just a
+platform rule.*
 
-zplot 是 MIT，免费的部分永远不会收费；issue 和 PR 永远欢迎。
+## 📈 CTP 交易接口封装（国内 · 免费提供）
 
-需要基于它做具体事情的话（把 Pine Script / 通达信公式的指标移植过来、把图表接进
-交易终端、CTP 行情与交易对接、指标口径对数），我可以接小单，两个入口：
+除开源的图表 / 指标外，作者另有一层对上期技术 CTP 交易 / 行情接口的 C++ 封装：
+把 `CThostFtdcTraderApi` / `CThostFtdcMdApi` 的裸指针、回调与 GBK 字符串收进
+一个值语义的接口（登录、结算单、报单、撤单、成交、持仓、行情订阅，自动
+GBK → UTF-8）。**这层封装不随仓库发布。**
 
-**🧑‍💻 [Fiverr](https://www.fiverr.com/zhangrenze/build-a-custom-kline-candlestick-chart-for-your-app)**
-— for international clients: custom K-line chart widgets, indicator porting,
-C++ integration. Clear packages, fast turnaround, in English.
+- 基于 **CTP API v6.7.11**（x64，se 流，`20250617_traderapi64_se_windows`）
+- 需要 CTP 对接 → 闲鱼联系作者，**免费提供**（预编译库 + 头文件 + 使用说明）
+- CTP 官方分发包（`thosttraderapi_se` / `thostmduserapi_se` 的 `.lib` 与
+  `.dll`）需自行向期货公司 / 上期技术获取，作者不代发
 
-**【闲鱼】** 国内客户在闲鱼 App 搜索 **`火山口小小的灯笼鱼`**（最稳的入口）；
-或点 [这里](https://m.tb.cn/h.8DqIIxg?tk=826LTof39nl) 打开（PC 上可能跳下载页，建议用手机闲鱼）。
-**CTP 对接走这条渠道**（见上一节）。
+## 【闲鱼】国内客户
+
+在闲鱼 App 搜索 **`火山口小小的灯笼鱼`**（最稳的入口）；
+或点 [这里](https://m.tb.cn/h.8DqIIxg?tk=826LTof39nl) 打开（PC 上可能跳下载页，
+建议用手机闲鱼）。
 
 **可接**：指标移植（Pine / 通达信 / 文华 → C++ / Python / MT5）、K 线控件集成、
 指标口径对数、图表与交易终端界面开发、CTP 行情与交易对接（**仅闲鱼渠道**）。
@@ -215,6 +223,3 @@ C++ integration. Clear packages, fast turnaround, in English.
 > 金融类软件的**开发**和**投资建议**是两回事：前一条我接，后一条碰都不碰。
 > 那不只是平台风控，是法律红线。
 
-*I build charting software; I do not give trading advice. For international contract
-work, the Fiverr gig above is the fastest way to start — packages, pricing and delivery
-times are all up front. Chinese clients: use the Xianyu shop above.*

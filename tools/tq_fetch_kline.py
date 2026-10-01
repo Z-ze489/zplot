@@ -1,81 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Fetch historical futures klines via TqSdk (TianQin)
-================================================================================
+Fetch historical futures klines via TqSdk (TianQin).
 
-Pulls klines (with volume and open interest) for a futures contract into a local
-file, for verifying indicator implementations: when your own MA / MACD / DMI
-does not match the numbers on the trading terminal, rule out the data source
-first.
-
-Requirements
     pip install tqsdk pandas
+    python tq_fetch_kline.py --symbol CZCE.MA701 --period 60 --length 8000
+    python tq_fetch_kline.py --list --symbol CZCE.MA      # list listed contracts
+    python tq_fetch_kline.py --selftest                   # no account needed
 
-Usage
-    :: install dependencies first
-        pip install tqsdk pandas
+Output, one bar per line:
 
-    :: fetch 1-minute bars for methanol 2701 (default 8000 bars, asks for
-       account interactively)
-        python tq_fetch_kline.py
+    datetime, open, high, low, close, volume, open_oi, close_oi
 
-    :: pass the account on the command line
-        python tq_fetch_kline.py --user YOUR_TQ_ACCOUNT --pass YOUR_PASSWORD
+datetime is the bar's start time in Beijing time (UTC+8); close_oi is the open
+interest at the end of the bar. Files land in data/ next to the script.
 
-    :: different contract / period (period is in seconds:
-       60=1min 300=5min 900=15min 3600=1h 86400=1d)
-        python tq_fetch_kline.py --symbol CZCE.MA701 --period 60 --length 3000
+Credentials: --user/--pass, or env TQ_USER/TQ_PASS, or interactive input.
+A free TianQin account works; the per-series cap is 8964 bars.
 
-    :: not sure which month code to use? list all listed contracts of the
-       product first
-        python tq_fetch_kline.py --list --symbol CZCE.MA
-
-    :: local pipeline self-test only (no TianQin connection, no account needed)
-        python tq_fetch_kline.py --selftest
-
-Output
-    One kline per line, columns fixed:
-
-        datetime, open, high, low, close, volume, open_oi, close_oi
-
-    - datetime  start time of the bar, Beijing time (UTC+8)
-    - open_oi   open interest at the start of the bar
-    - close_oi  open interest at the end of the bar (open-interest studies use this)
-
-    Files land in the data/ folder next to the script, named after the
-    contract and period.
-
-Account
-    Three ways to provide it, highest priority first:
-      1. command line --user / --pass
-      2. environment variables TQ_USER / TQ_PASS
-      3. interactive input at runtime (password not echoed)
-    A free TianQin account is enough; the per-series limit is 8964 bars.
-
-Contract codes
-    TianQin uses the "EXCHANGE.code" form, but **the number of digits in the
-    month part differs per exchange** -- the most common trap:
-
-        CZCE   3 digits -- methanol Jan 2027 is CZCE.MA701, NOT CZCE.MA2701
-                          also: rapeseed meal CZCE.RM701 / sugar CZCE.SR701 / PTA CZCE.TA701
-        SHFE   4 digits -- rebar Jan 2027 is SHFE.rb2701
-        DCE    4 digits -- soybean meal Jan 2027 is DCE.m2701
-        CFFEX  4 digits -- CSI 300 is CFFEX.IF2612
-
-    Writing CZCE with 4 digits (CZCE.MA2701) gets auto-folded to CZCE.MA701
-    by this script, no manual fix needed.
-
-    "non-existent instrument" has exactly two causes:
-      1. wrong digit count for CZCE (the auto-correction above catches it first)
-      2. that month is not listed, or already delisted
-
-    Either way, list what is currently trading for the product:
-
-        python tq_fetch_kline.py --list --symbol CZCE.MA
-
-    To skip month codes entirely, use the continuous contracts:
-    main KQ.m@CZCE.MA or index KQ.i@CZCE.MA.
+CZCE contract months are 3 digits (CZCE.MA701, not MA2701); other exchanges
+use 4 (SHFE.rb2701). A 4-digit CZCE month is auto-folded by this script.
 """
 
 from __future__ import annotations
@@ -91,10 +35,10 @@ import time
 # Constants
 # ---------------------------------------------------------------------------
 
-DEFAULT_SYMBOL = "CZCE.MA701"     # methanol 2701; CZCE months are 3 digits (7=2027, 01=Jan)
+DEFAULT_SYMBOL = "CZCE.MA701"
 DEFAULT_PERIOD = 60                # seconds; 60 = 1 minute
-DEFAULT_LENGTH = 8000              # common choice, leaves headroom below the 8964 cap
-MAX_LENGTH = 8964                  # hard per-series limit of TianQin
+DEFAULT_LENGTH = 8000
+MAX_LENGTH = 8964                  # TianQin per-series hard cap
 
 COLUMNS = ("datetime", "open", "high", "low", "close", "volume", "open_oi", "close_oi")
 
@@ -104,16 +48,14 @@ TRADING_HOURS = ((9, 11), (13, 15), (21, 23))
 
 
 # ---------------------------------------------------------------------------
-# Small helpers
+# Helpers
 # ---------------------------------------------------------------------------
 
 def script_dir() -> str:
-    """Directory this script lives in."""
     return os.path.dirname(os.path.abspath(__file__))
 
 
 def period_label(period: int) -> str:
-    """Human-readable period name from a second count."""
     if period % 86400 == 0:
         return f"{period // 86400} day"
     if period % 3600 == 0:
@@ -124,7 +66,6 @@ def period_label(period: int) -> str:
 
 
 def period_tag(period: int) -> str:
-    """Seconds -> short tag used inside file names."""
     if period % 86400 == 0:
         return f"{period // 86400}d"
     if period % 3600 == 0:
@@ -135,13 +76,7 @@ def period_tag(period: int) -> str:
 
 
 def fmt_num(value, decimals: int = 4) -> str:
-    """
-    Number -> text written into the CSV.
-
-    Integral values are written as integers (2901.0 -> "2901"), trailing zeros
-    are trimmed (0.3000 -> "0.3"), precision capped at 4 decimals.
-    None / NaN becomes an empty string.
-    """
+    """Number -> CSV text: integral values as integers, trailing zeros trimmed, NaN as empty."""
     if value is None:
         return ""
     try:
@@ -157,7 +92,6 @@ def fmt_num(value, decimals: int = 4) -> str:
 
 
 def num_or_none(value):
-    """Number -> float or None (for JSON output)."""
     try:
         f = float(value)
     except (TypeError, ValueError):
@@ -166,7 +100,6 @@ def num_or_none(value):
 
 
 def default_out_path(symbol: str, period: int, fmt: str) -> str:
-    """Default output path: data/<contract>_<period>.<ext> next to the script."""
     folder = os.path.join(script_dir(), "data")
     name = f"{symbol.replace('.', '_')}_{period_tag(period)}.{fmt}"
     return os.path.join(folder, name)
@@ -197,22 +130,21 @@ def parse_args(argv=None) -> argparse.Namespace:
     parser.add_argument("--user", default=None,
                         help="TianQin account (falls back to env TQ_USER, then interactive input)")
     parser.add_argument("--pass", dest="password", default=None,
-                        help="TianQin password (same fallbacks; prefer env vars or interactive input to keep it out of shell history)")
+                        help="TianQin password (same fallbacks)")
     parser.add_argument("--wait", type=float, default=30.0,
                         help="max seconds to wait for data to settle (default 30)")
     parser.add_argument("--drop-last", action="store_true",
-                        help="drop the last (still-forming) bar; cleaner for historical replay")
+                        help="drop the last (still-forming) bar")
     parser.add_argument("--quiet", action="store_true",
-                        help="print only the summary, not the head/tail preview rows")
+                        help="print only the summary, no head/tail preview rows")
     parser.add_argument("--selftest", action="store_true",
-                        help="run the full write pipeline on synthetic data, no TianQin connection")
+                        help="run the write pipeline on synthetic data, no connection")
     parser.add_argument("--list", dest="list_instruments", action="store_true",
-                        help="only list currently listed contracts of the product (use with --symbol), no data fetch")
+                        help="only list currently listed contracts (use with --symbol)")
     return parser.parse_args(argv)
 
 
 def resolve_auth(args: argparse.Namespace):
-    """Take credentials in order: command line -> env vars -> interactive input."""
     user = args.user or os.environ.get("TQ_USER") or ""
     password = args.password or os.environ.get("TQ_PASS") or ""
 
@@ -247,7 +179,7 @@ def split_symbol(symbol: str):
 
 
 def guess_product(code: str) -> str:
-    """Strip the month digits off a contract code: MA701 -> MA, rb2701 -> rb, IF2612 -> IF."""
+    """MA701 -> MA, rb2701 -> rb, IF2612 -> IF."""
     i = len(code)
     while i > 0 and code[i - 1].isdigit():
         i -= 1
@@ -255,14 +187,7 @@ def guess_product(code: str) -> str:
 
 
 def normalize_symbol(symbol: str) -> str:
-    """
-    Fold a contract code into the spelling TianQin accepts; returns the fixed
-    form (or the original if nothing needed changing).
-
-    CZCE months are 3 digits (MA605 = May 2026), every other exchange uses 4
-    (rb2701). CZCE.MA2701 gets rejected as "non-existent instrument" -- this
-    folds it to CZCE.MA701 automatically.
-    """
+    """Fold a 4-digit CZCE month (CZCE.MA2701) into 3 digits (CZCE.MA701)."""
     ex, code = split_symbol(symbol)
     if ex != "CZCE" or not code:
         return symbol
@@ -270,20 +195,13 @@ def normalize_symbol(symbol: str) -> str:
     while i > 0 and code[i - 1].isdigit():
         i -= 1
     digits = code[i:]
-    if len(digits) == 4:            # 2701 -> 701
+    if len(digits) == 4:
         return f"{ex}.{code[:i]}{digits[-3:]}"
     return symbol
 
 
 def query_instruments(api, symbol: str):
-    """
-    Query listed contracts matching the same exchange and product as `symbol`;
-    returns a sorted list of codes.
-
-    TianQin's query_quotes takes a product id whose case differs per exchange
-    (CZCE: MA, SHFE: rb), so try all three casings; if none match, pull the
-    whole exchange and filter locally.
-    """
+    """Listed contracts matching the same exchange and product; sorted."""
     ex, code = split_symbol(symbol)
     if not ex:
         return []
@@ -312,7 +230,7 @@ def query_instruments(api, symbol: str):
 
 
 def format_instrument_hint(api, symbol: str) -> str:
-    """On subscription failure, show a copy-pasteable next step: candidates plus a ready command."""
+    """On subscription failure, show candidate contracts and a ready-to-run command."""
     ex, _ = split_symbol(symbol)
     product = guess_product(symbol.rpartition(".")[2])
     items = query_instruments(api, symbol)
@@ -337,7 +255,6 @@ def format_instrument_hint(api, symbol: str) -> str:
 # ---------------------------------------------------------------------------
 
 def connect(user: str, password: str):
-    """Open a TqApi connection; on failure exit immediately with the reason."""
     try:
         from tqsdk import TqApi, TqAuth
     except ImportError:
@@ -356,12 +273,9 @@ def connect(user: str, password: str):
 def fetch_klines(symbol: str, period: int, length: int, wait_seconds: float,
                  user: str, password: str):
     """
-    Connect to TianQin and fetch klines; returns a copy of the DataFrame.
-
-    TianQin is a subscribe-and-push model: get_kline_serial only registers the
-    subscription, wait_update is what fills the DataFrame. So loop until either
-    `length` bars arrived, the length stopped changing for several consecutive
-    polls (that is all there is), or the timeout hit.
+    TianQin is subscribe-and-push: get_kline_serial only registers the
+    subscription, wait_update fills the DataFrame. Loop until `length` bars
+    arrived, the length stabilized, or the timeout hit.
     """
     api = connect(user, password)
 
@@ -384,7 +298,7 @@ def fetch_klines(symbol: str, period: int, length: int, wait_seconds: float,
                 break
             if n == last_n:
                 stable += 1
-                if stable >= 4:         # length unchanged 4 polls in a row: that is all
+                if stable >= 4:
                     break
             else:
                 last_n, stable = n, 0
@@ -398,13 +312,7 @@ def fetch_klines(symbol: str, period: int, length: int, wait_seconds: float,
 
 
 def build_records(df, drop_last: bool = False):
-    """
-    DataFrame -> list of {column: value} dicts.
-
-    TianQin's datetime is a nanosecond UTC timestamp; adding 8 hours yields
-    Beijing time. Leading placeholder rows (datetime <= 0) and bad rows
-    (empty open) are dropped.
-    """
+    """DataFrame -> list of {column: value}; TianQin datetime is ns UTC, +8h = Beijing time."""
     import pandas as pd
 
     df = df[df["datetime"] > 0]
@@ -431,7 +339,6 @@ def build_records(df, drop_last: bool = False):
         "close": column("close"),
         "volume": column("volume"),
         "open_oi": column("open_oi"),
-        # fall back to the starting OI when the closing one is unavailable, so the column is never empty
         "close_oi": column("close_oi") if "close_oi" in df.columns else column("open_oi"),
     }
     return [{key: data[key][i] for key in COLUMNS} for i in range(len(stamps))]
@@ -442,7 +349,6 @@ def build_records(df, drop_last: bool = False):
 # ---------------------------------------------------------------------------
 
 def write_records(records, path: str, fmt: str, encoding: str) -> None:
-    """Write records in the requested format, creating the folder if needed."""
     parent = os.path.dirname(os.path.abspath(path))
     if parent:
         os.makedirs(parent, exist_ok=True)
@@ -465,7 +371,6 @@ def write_records(records, path: str, fmt: str, encoding: str) -> None:
 
 
 def summarize(records) -> None:
-    """Print a summary, with a coarse timezone sanity check."""
     if not records:
         print("  No klines were fetched.")
         return
@@ -491,7 +396,6 @@ def summarize(records) -> None:
 
 
 def print_preview(records, head: int = 3, tail: int = 3) -> None:
-    """Print head and tail rows for a quick eyeball check; prints everything when short."""
     print("  columns: " + ", ".join(COLUMNS))
     if len(records) <= head + tail:
         head_rows, tail_rows = records, []
@@ -515,7 +419,6 @@ def print_preview(records, head: int = 3, tail: int = 3) -> None:
 # ---------------------------------------------------------------------------
 
 def run_list(args: argparse.Namespace) -> int:
-    """List currently listed contracts of a product, no data fetch. --symbol takes CZCE.MA or CZCE.MA701."""
     symbol = normalize_symbol(args.symbol)
     ex, code = split_symbol(symbol)
     product = guess_product(code)
@@ -554,7 +457,6 @@ def run_list(args: argparse.Namespace) -> int:
 # ---------------------------------------------------------------------------
 
 def run_selftest(args: argparse.Namespace) -> int:
-    """Verify timezone conversion / formatting / writing on synthetic klines, no TianQin connection."""
     try:
         import pandas as pd
     except ImportError:
@@ -563,7 +465,7 @@ def run_selftest(args: argparse.Namespace) -> int:
 
     from datetime import datetime, timedelta, timezone
 
-    print("Self-test mode: running the write pipeline on synthetic data, no TianQin connection.")
+    print("Self-test mode: running the write pipeline on synthetic data, no connection.")
 
     # 5 one-minute bars starting at 2026-09-29 21:00 Beijing time
     first_bj = datetime(2026, 9, 29, 21, 0, 0, tzinfo=timezone(timedelta(hours=8)))
