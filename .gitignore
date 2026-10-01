@@ -1,21 +1,8 @@
 # =====================================================================
-#  zplot -- what stays out of the repository
-#
-#  Not published: the CTP wrapper (distributed separately), the CTP
-#  SDK (self-provided), build outputs, and unrelated local projects.
+#  zplot -- build outputs and editor files that never enter the repo
 # =====================================================================
 
-# ---- CTP wrapper: distributed separately ----
-/ctp/
-
-# ---- CTP SDK: official vendor distribution, self-provided ----
-/third_party/
-
-# ---- Unrelated local projects ----
-/Futures_py/
-
-# ---- Build outputs (zero binaries in the repo) ----
-/lib/
+# ---- Build outputs ----
 /build/
 /demo/build/
 *.obj
@@ -37,11 +24,6 @@
 *.opensdf
 *.vcxproj.user
 *.sln.docstates
-
-# ---- Local working data, not part of the deliverable ----
-/tools/data/数据.md
-/tools/data/文华验证公式.txt
-/tools/data/*_wh*.csv
 
 # ---- Misc ----
 *.bak
