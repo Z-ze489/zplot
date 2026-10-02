@@ -163,7 +163,7 @@ so settlement-driven studies never degenerate into an empty chart.
 
 | Component | Where | License |
 |---|---|---|
-| glad 0.1.36 (OpenGL 4.6 core loader) | `demo/glad/` | MIT / public domain |
+| glad 0.1.36 (OpenGL 4.6 core loader) | `demo/glad/` | MIT — see [`demo/glad/LICENSE`](demo/glad/LICENSE) |
 
 ## License
 
