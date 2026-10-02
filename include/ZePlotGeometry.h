@@ -14,9 +14,6 @@
 
 namespace zplot {
 
-    using Kit::Color4f;
-    using Kit::PlotVertex;
-
     /**
      * @brief Linear map from data coordinates to canvas pixels.
      *

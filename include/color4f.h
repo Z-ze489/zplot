@@ -5,7 +5,7 @@
 
 #pragma once
 
-namespace Kit {
+namespace zplot {
 
     /**
      * @brief RGBA color with normalized float channels (0.0 ~ 1.0).
@@ -83,4 +83,4 @@ namespace Kit {
         static constexpr Color4f Transparent() { return Color4f(0.0f, 0.0f, 0.0f, 0.0f); }
     };
 
-} // namespace Kit
+} // namespace zplot

@@ -8,7 +8,7 @@
  *  - a plain Win32 window with a hand-rolled WGL OpenGL 4.6 core-profile context
  *    (no GLFW / SDL / GLAD / GLEW -- see ZeOpenGL.h);
  *  - every pixel is drawn as triangles fed straight from zplot's geometry helpers,
- *    which means the library's `Kit::PlotVertex` layout is uploaded as-is;
+ *    which means the library's `zplot::PlotVertex` layout is uploaded as-is;
  *  - three stacked panels sharing one horizontal camera: candlesticks with an optional
  *    trend overlay, an oscillator sub-chart, and a volume / open-interest sub-chart;
  *  - 24 oscillators, 8 trend overlays and 13 volume studies are precomputed at start-up
@@ -67,13 +67,13 @@
 // ===========================================================================
 
 namespace pal {
-    const Kit::Color4f kWindow  = Kit::Color4f::FromHex(0x0F1216);
-    const Kit::Color4f kPanel   = Kit::Color4f::FromHex(0x14181E);
-    const Kit::Color4f kGrid    = Kit::Color4f::FromHex(0x1D232B);
-    const Kit::Color4f kGridMaj = Kit::Color4f::FromHex(0x2F3844);
-    const Kit::Color4f kText    = Kit::Color4f::FromHex(0xE4E9F0);
-    const Kit::Color4f kDim     = Kit::Color4f::FromHex(0x8792A2);
-    const Kit::Color4f kAccent  = Kit::Color4f::FromHex(0x53A6FF);
+    const zplot::Color4f kWindow  = zplot::Color4f::FromHex(0x0F1216);
+    const zplot::Color4f kPanel   = zplot::Color4f::FromHex(0x14181E);
+    const zplot::Color4f kGrid    = zplot::Color4f::FromHex(0x1D232B);
+    const zplot::Color4f kGridMaj = zplot::Color4f::FromHex(0x2F3844);
+    const zplot::Color4f kText    = zplot::Color4f::FromHex(0xE4E9F0);
+    const zplot::Color4f kDim     = zplot::Color4f::FromHex(0x8792A2);
+    const zplot::Color4f kAccent  = zplot::Color4f::FromHex(0x53A6FF);
 }
 
 // ===========================================================================
@@ -353,7 +353,7 @@ constexpr int kStyleCount = 4;
 zplot::KLineStyle MakeStyle(int index) {
     zplot::KLineStyle style;          // red hollow up / cyan solid down / white flat
     if (index == 2) {                 // a close line only carries one color
-        style.up = Kit::Color4f::FromHex(0x7FD4FF);
+        style.up = zplot::Color4f::FromHex(0x7FD4FF);
         style.down = style.up;
         style.flat = style.up;
     }
@@ -1163,7 +1163,7 @@ int main(int argc, char** argv) {
         app.uTextViewport = glGetUniformLocation(app.progText, "uViewport");
         app.uTextAtlas = glGetUniformLocation(app.progText, "uAtlas");
 
-        // Solid geometry: Kit::PlotVertex is exactly { x, y, r, g, b, a } with no padding,
+        // Solid geometry: zplot::PlotVertex is exactly { x, y, r, g, b, a } with no padding,
         // so the vertex array is uploaded verbatim.
         glGenVertexArrays(1, &app.vaoSolid);
         glGenBuffers(1, &app.vboSolid);

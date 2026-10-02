@@ -185,7 +185,7 @@ namespace zegl {
          * @return The pen x position after the last glyph.
          */
         float Draw(std::vector<TextVertex>& out, float x, float y,
-            const char* text, const Kit::Color4f& c) const {
+            const char* text, const zplot::Color4f& c) const {
 
             const float texW = static_cast<float>(kCols * kCellW);
             const float texH = static_cast<float>(kRows * kCellH);

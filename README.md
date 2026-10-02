@@ -106,7 +106,7 @@ vp.xMin = 7600.0f; vp.xMax = 7999.0f;              // bar indices, shared with t
 vp.yMin = macd.yMin; vp.yMax = macd.yMax;
 
 // 3. triangles out
-std::vector<Kit::PlotVertex> verts;
+std::vector<zplot::PlotVertex> verts;
 zplot::AppendSeries(verts, macd, vp);              // the indicator
 zplot::AppendKLine(verts, bars, priceViewport, {});// the candles, same x range -> aligned
 

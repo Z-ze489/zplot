@@ -10,7 +10,7 @@
 #include <cstddef>
 #include <string>
 
-namespace Kit {
+namespace zplot {
 
     /**
      * @brief One plotting vertex: position plus color.
@@ -51,4 +51,4 @@ namespace Kit {
         Color4f       color = Color4f(0.0f, 0.0f, 0.0f, 1.0f);   ///< Text color
     };
 
-} // namespace Kit
+} // namespace zplot
