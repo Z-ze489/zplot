@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 /**
  * @file ZePlotTypes.h
  * @brief Plotting data contract: PlotVertex (a vertex) and PlotText (a text label).

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 /**
  * @file ZeBar.h
  * @brief A single OHLC candlestick, the smallest data unit of a chart.

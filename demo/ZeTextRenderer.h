@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 /**
  * @file ZeTextRenderer.h
  * @brief Bitmap-font text rendering for the demo: a GDI-built glyph atlas + quads.

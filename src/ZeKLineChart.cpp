@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 /**
  * @file ZeKLineChart.cpp
  * @brief Candlestick / bamboo / close-line / tower vertex generation.

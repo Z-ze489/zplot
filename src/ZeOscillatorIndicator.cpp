@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 /**
  * @file ZeOscillatorIndicator.cpp
  * @brief Oscillator indicator implementations.

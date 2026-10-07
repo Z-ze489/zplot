@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 /**
  * @file ZePlotGeometry.h
  * @brief Plotting geometry: viewport mapping and shape triangulation.

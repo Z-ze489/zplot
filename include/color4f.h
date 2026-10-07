@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 /**
  * @file color4f.h
  * @brief RGBA floating-point color used across zplot.

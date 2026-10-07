@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 /**
  * @file ZeKLineChart.h
  * @brief Candlestick chart: turn a sequence of Bar into body and wick triangles.

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 /**
  * @file main.cpp
  * @brief zplot demo -- a self-contained Win32 + OpenGL 4.6 candlestick and indicator viewer.

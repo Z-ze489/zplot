@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 /**
  * @file ZeTrendIndicator.cpp
  * @brief Trend indicator implementations.

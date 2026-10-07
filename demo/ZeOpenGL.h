@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 /**
  * @file ZeOpenGL.h
  * @brief Win32 + WGL window bootstrap: create an OpenGL 4.6 core-profile context.

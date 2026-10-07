@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 /**
  * @file ZeVolumeIndicator.h
  * @brief Volume and open-interest indicators.
