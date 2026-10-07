@@ -13,10 +13,11 @@ no GLFW, no SDL, no Qt, no FreeType. The only third-party code anywhere is
 
 ## Status
 
-- **Charting + indicators**: stable, used in production by the author. 55+ indicators,
+- **Charting + indicators**: stable, used in production by the author. 59 indicators,
   matched item-by-item against the reference formulas of Chinese trading terminals.
 - **Demo**: complete and self-contained — builds and runs out of the box from a fresh clone.
-- **CTP wrapper**: **not in this repository** (distributed separately — see Custom work below).
+- **CTP wrapper**: **not in this repository** (distributed separately — see
+  [`CONTACT.md`](CONTACT.md)).
 
 ---
 
@@ -44,9 +45,9 @@ actually about charts: bars in, triangles out.
 | Area | Contents |
 |---|---|
 | Candlesticks | candles (hollow up / solid down), bamboo (OHLC bars), close line, tower |
-| Oscillators | `MACD` `KDJ` `KD` `ROC` `RSI` `SLOWKD` `WR` `BIAS` `CR` `ATR` `DMI` `CCI` `PSY` `MTM` `DDI` `DMA` `ADTM` `ARBR` `LON` `SRDM` `SHORT` `MI` `DPO` `ASl` |
-| Trend | `BOLL` `MA` `SAR` `SAR1` `PUBU` `SP` `SMA` `EMA` `HCL` `MIKE` `BBI` `DKX` `EMA2` `BBlBOLL` `CDP` `ENV` `TRMA` `TSMA` and more |
-| Volume / OI | `CJL` `MV` `CCL` `OPI` `OBV` `VR` `AD` `PVT` `WAD` `WVAD` `VOSC` `VROC` `VRSI` |
+| Oscillators (24) | `MACD` `KDJ` `KD` `ROC` `RSI` `SLOWKD` `WR` `BIAS` `CR` `ATR` `DMI` `CCI` `PSY` `MTM` `DDI` `DMA` `ADTM` `ARBR` `LON` `SRDM` `SHORT` `MI` `DPO` `ASl` |
+| Trend (21) | `MA` `EMA` `EMA2` `SMA` `TRMA` `TSMA` `BOLL` `BBlBOLL` `MA扩展` `PUBU` `SAR` `HCL` `MIKE` `BBI` `DKX` `CDP` `唐奇安` `ENV` `SP` `空` `SAR1` |
+| Volume / OI (14) | `CJL` `MV` `CCL` `OPI` `OBV` `VR` `AD` `PVT` `WAD` `WVAD` `VOSC` `VROC` `VRSI` `价量运行趋势` |
 | Geometry | viewport mapping, and triangulation of rectangles, thick segments, polylines, bars and scatter points |
 
 ## Repository layout
@@ -72,12 +73,22 @@ zplot/
 │   ├── ZeOpenGL.h            WGL bootstrap: create a 4.6 core context
 │   ├── ZeTextRenderer.h      GDI glyph atlas -> GL texture -> text quads
 │   └── glad/                 vendored OpenGL loader (glad 0.1.36, gl=4.6 core)
+│       ├── include/          glad.h + khrplatform.h
+│       ├── src/glad.c
+│       └── LICENSE
 ├── tools/
 │   ├── tq_fetch_kline.py     fetch minute bars into the demo's CSV format
 │   └── data/                 a sample 1-minute dataset
 ├── docs/
 │   ├── screenshot.png
-│   └── indicators.md         indicator formulas, params, and terminal-match results
+│   ├── 目录.md               documentation index / 文档总目录
+│   ├── development.md        developer guide (EN) -- samples are compiled and run
+│   ├── development.zh.md     开发者使用指南（中文）
+│   ├── examples/             the guide's samples + verify-examples.ps1
+│   ├── indicators.md         indicator formulas, params, and terminal-match results
+│   └── indicators.zh.md      指标清单与文华 / 通达信对账（中文）
+├── CONTACT.md                contact & contract work / 联系方式与定制开发
+├── LICENSE                   MIT
 └── CMakeLists.txt            builds the library and the demo
 ```
 
@@ -172,54 +183,16 @@ The charting and indicator code in `include/` and `src/` is **MIT** — see
 
 ---
 
-# Custom work / 定制服务
+# Documentation / 文档
 
-**EN** — zplot is MIT and the free part stays free forever; issues and PRs are
-always welcome. Need something built on top of it — a K-line widget inside your
-app, indicators ported, a chart wired into your trading terminal? Two channels
-below.
+- **[docs/目录.md](docs/目录.md)** — **文档总目录**，从这里进（中文）
+- **[docs/development.zh.md](docs/development.zh.md)** — 开发者使用指南（中文）
+- **[docs/development.md](docs/development.md)** — developer guide (EN),
+  every sample compiled and run before publication
+- **[docs/indicators.zh.md](docs/indicators.zh.md)** ·
+  **[indicators.md](docs/indicators.md)** — 59 个指标的名字、公式、默认参数与对账结果
+- **[CONTACT.md](CONTACT.md)** — contact & contract work / 联系方式与定制开发
 
-**中文** —— zplot 的开源部分永远免费；issue 和 PR 永远欢迎。需要基于它做定制的
-话（把图表接进你的软件、移植指标、开发交易终端界面），走下面两个渠道。
-
-## 🧑‍💻 Fiverr — international clients
-
-I take contract work on Fiverr: **custom K-line chart widgets**, **indicator
-porting** (Pine Script / 通达信 / 文华 → C++ / Python / MT5), and **C++ chart
-integration** into your trading terminal.
-
-- Clear packages: **$150 / $400 / $1000**, delivery 3–10 days, in English
-- The engine is open source (MIT) — what you pay for is my time
-
-👉 [fiverr.com/zhangrenze/build-a-custom-kline-candlestick-chart-for-your-app](https://www.fiverr.com/zhangrenze/build-a-custom-kline-candlestick-chart-for-your-app)
-
-*I build charting software; I do not give trading advice, signal
-recommendations, or strategy development. That is a legal line, not just a
-platform rule.*
-
-## 📈 CTP 交易接口封装（国内 · 免费提供）
-
-除开源的图表 / 指标外，作者另有一层对上期技术 CTP 交易 / 行情接口的 C++ 封装：
-把 `CThostFtdcTraderApi` / `CThostFtdcMdApi` 的裸指针、回调与 GBK 字符串收进
-一个值语义的接口（登录、结算单、报单、撤单、成交、持仓、行情订阅，自动
-GBK → UTF-8）。**这层封装不随仓库发布。**
-
-- 基于 **CTP API v6.7.11**（x64，se 流，`20250617_traderapi64_se_windows`）
-- 需要 CTP 对接 → 闲鱼联系作者，**免费提供**（预编译库 + 头文件 + 使用说明）
-- CTP 官方分发包（`thosttraderapi_se` / `thostmduserapi_se` 的 `.lib` 与
-  `.dll`）需自行向期货公司 / 上期技术获取，作者不代发
-
-## 【闲鱼】国内客户
-
-在闲鱼 App 搜索 **`火山口小小的灯笼鱼`**（最稳的入口）；
-或点 [这里](https://m.tb.cn/h.8DqIIxg?tk=826LTof39nl) 打开（PC 上可能跳下载页，
-建议用手机闲鱼）。
-
-**可接**：指标移植（Pine / 通达信 / 文华 → C++ / Python / MT5）、K 线控件集成、
-指标口径对数、图表与交易终端界面开发、CTP 行情与交易对接（**仅闲鱼渠道**）。
-
-**不接**：代客操盘、收益分成、信号推荐，以及任何形式的投资建议。
-
-> 金融类软件的**开发**和**投资建议**是两回事：前一条我接，后一条碰都不碰。
-> 那不只是平台风控，是法律红线。
+zplot is MIT and the free part stays free forever. Issues and PRs are always
+welcome.
 
