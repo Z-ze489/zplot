@@ -531,11 +531,7 @@ CTP 是国内的期货接口，海外用不上，所以这一节只面向国内�
 
 ## 联系方式
 
-- **国内** —— 在闲鱼 App 搜索 **`火山口小小的灯笼鱼`**，
-  或点[这里](https://m.tb.cn/h.8DqIIxg?tk=826LTof39nl) 打开
-  （PC 上可能跳下载页，建议用手机闲鱼）。也可以知乎私信。
-- **海外 / English** ——
-  [Fiverr](https://www.fiverr.com/zhangrenze/build-a-custom-kline-candlestick-chart-for-your-app)，
-  英文交付，3–10 天
+- **国内 / 海外** —— 闲鱼、Fiverr、知乎的完整联系方式与链接见
+  [CONTACT.md](../CONTACT.md)
 - **库本身的问题** —— 到 [Z-ze489/zplot](https://github.com/Z-ze489/zplot)
   开 issue

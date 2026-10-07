@@ -16,8 +16,8 @@ development. Please read the developer guide first so we can skip the basics.
 - 指标移植：Pine Script / 通达信 / 文华 → C++ / Python / MT5
 - K 线控件集成：把图表接进你现有的软件或交易终端
 - 指标口径对数：让你的实现与参考软件逐根对齐
-- CTP 行情与交易对接（**仅此渠道**）：基于 CTP API v6.7.11 的 C++ 封装，
-  预编译库 + 头文件 + 使用说明，**免费提供**
+- CTP 行情与交易对接（**仅闲鱼 / 知乎渠道**）：基于 CTP API v6.7.11 的 C++ 封装，
+  以二进制形式提供（预编译库 + 头文件 + 使用说明）
 - 图表与交易终端界面开发
 
 **不接**
@@ -45,7 +45,6 @@ development. Please read the developer guide first so we can skip the basics.
 - Indicator porting — Pine Script / TDX / WenHua formulas into C++, Python or MT5
 - K-line chart widget integration into an existing app or trading terminal
 - Indicator reconciliation — proving an implementation matches a reference terminal bar for bar
-- CTP market-data and trading integration (C++ wrapper, distributed separately from this repository)
 
 **What I do not take on**
 
@@ -56,7 +55,7 @@ development. Please read the developer guide first so we can skip the basics.
 
 - **Fiverr** —
   [fiverr.com/zhangrenze/build-a-custom-kline-candlestick-chart-for-your-app](https://www.fiverr.com/zhangrenze/build-a-custom-kline-candlestick-chart-for-your-app)
-  — clear packages, delivery in English, 3–10 days
+  — delivered in English
 - **GitHub** — open an issue on
   [Z-ze489/zplot](https://github.com/Z-ze489/zplot) if the question is about
   the library itself

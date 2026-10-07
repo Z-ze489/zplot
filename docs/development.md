@@ -546,8 +546,6 @@ contract work:
   Python, or MT5
 - **K-line widget integration** — a chart wired into your existing app or  
   trading terminal
-- **CTP market-data / trading integration** — a C++ wrapper over the  
-  CTP API, distributed separately from this repository
 - **Indicator reconciliation** — proving your implementation matches a  
   reference terminal bar for bar
 
