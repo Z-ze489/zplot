@@ -13,6 +13,8 @@ no GLFW, no SDL, no Qt, no FreeType. The only third-party code anywhere is
 
 ## Status
 
+- **Version**: 1.0.0 — see [`include/ZeVersion.h`](include/ZeVersion.h). The API is stable;
+  a breaking change will come with a major bump.
 - **Charting + indicators**: stable, used in production by the author. 59 indicators,
   matched item-by-item against the reference formulas of Chinese trading terminals.
 - **Demo**: complete and self-contained — builds and runs out of the box from a fresh clone.
@@ -54,9 +56,10 @@ actually about charts: bars in, triangles out.
 
 ```
 zplot/
-├── include/                  the entire public API (8 headers)
+├── include/                  the entire public API (9 headers)
 │   ├── ZeBar.h               the input bar (OHLC + volume + open interest)
 │   ├── ZePlotTypes.h         the vertex / text data contract
+│   ├── ZeVersion.h           version macros and zplot::VersionString()
 │   ├── color4f.h             RGBA color value type
 │   ├── ZePlotGeometry.h      viewport mapping + triangulation helpers
 │   ├── ZeKLineChart.h        candles, bamboo, close line, tower

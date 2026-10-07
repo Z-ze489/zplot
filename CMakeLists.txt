@@ -1,5 +1,20 @@
 cmake_minimum_required(VERSION 3.20)
-project(zplot LANGUAGES C CXX)
+
+project(zplot
+    VERSION     1.0.0
+    DESCRIPTION "OHLC bars in, triangle vertices out -- a dependency-free C++20 charting library"
+    LANGUAGES   C CXX
+)
+
+# Keep the header in step with the version above. A consumer can read the
+# number from either place, so a silent mismatch would be worse than a build
+# that stops -- bump both together.
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/include/ZeVersion.h" _zplot_version_header)
+if(NOT _zplot_version_header MATCHES "ZPLOT_VERSION_STRING \"${PROJECT_VERSION}\"")
+    message(FATAL_ERROR
+        "include/ZeVersion.h does not match project VERSION (${PROJECT_VERSION}). "
+        "Set ZPLOT_VERSION_STRING to \"${PROJECT_VERSION}\" in that header.")
+endif()
 
 # ---------------------------------------------------------------------------
 # zplot -- static library: candlesticks, oscillators, trend and volume studies.
