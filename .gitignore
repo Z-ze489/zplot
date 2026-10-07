@@ -2,9 +2,20 @@
 #  zplot -- build outputs and editor files that never enter the repo
 # =====================================================================
 
+# ---- Not part of this repository ----
+# The CTP wrapper is distributed separately from the open-source chart code,
+# and the CTP SDK is an official vendor distribution. Neither belongs here.
+/ctp/
+/third_party/
+/lib/
+
+# ---- Unrelated local project ----
+/Futures_py/
+
 # ---- Build outputs ----
 /build/
 /demo/build/
+/docs/examples/build/
 *.obj
 *.pdb
 *.ilk
@@ -14,6 +25,7 @@
 *.tlog
 *.log
 *.con
+*.exe
 
 # ---- Python ----
 __pycache__/

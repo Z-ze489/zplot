@@ -1,5 +1,14 @@
-# Binaries and images -- never apply line-ending conversion to these.
-*.lib binary
-*.dll binary
-*.exe binary
-*.png binary
+# ---- Text files: normalise line endings on commit, LF in the repo ----
+* text=auto eol=lf
+
+# Markdown in this repo is hand-wrapped. Trailing whitespace is meaningful in
+# exactly one place -- a hard line break -- so it is left alone on purpose.
+*.md text eol=lf
+
+# ---- Binaries and images -- never apply any conversion to these ----
+*.lib  binary
+*.dll  binary
+*.exe  binary
+*.obj  binary
+*.pdb  binary
+*.png  binary
