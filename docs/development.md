@@ -31,7 +31,7 @@ written by hand.
 
 |                    |                                                                                                              |
 | ------------------ | ------------------------------------------------------------------------------------------------------------ |
-| **In the box**     | Candlestick geometry (5 styles), 59 indicators, viewport mapping, triangulation helpers (`include/`, `src/`) |
+| **In the box**     | Candlestick geometry (4 styles), 59 indicators, viewport mapping, triangulation helpers (`include/`, `src/`) |
 | **Not in the box** | Any renderer, any window, any font, any file/socket I/O                                                      |
 | **You supply**     | A `std::vector<Bar>`, a place to draw, and a way to close the window                                         |
 
