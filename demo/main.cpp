@@ -48,6 +48,7 @@
 #include <ZeOscillatorIndicator.h>
 #include <ZePlotGeometry.h>
 #include <ZeTrendIndicator.h>
+#include <ZeVersion.h>
 #include <ZeVolumeIndicator.h>
 
 #include "ZeOpenGL.h"
@@ -1147,6 +1148,7 @@ int main(int argc, char** argv) {
 
         const char* version = reinterpret_cast<const char*>(glGetString(GL_VERSION));
         const char* renderer = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
+        std::printf("zplot %s\n", zplot::VersionString());
         std::printf("OpenGL %s   %s\n", version ? version : "?", renderer ? renderer : "?");
         std::fflush(stdout);
     }
