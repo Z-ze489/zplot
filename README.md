@@ -80,7 +80,7 @@ zplot/
 │   └── data/                 a sample 1-minute dataset
 ├── docs/
 │   ├── screenshot.png
-│   ├── 目录.md               documentation index / 文档总目录
+│   ├── index.md              documentation index / 文档总目录
 │   ├── development.md        developer guide (EN) -- samples are compiled and run
 │   ├── development.zh.md     开发者使用指南（中文）
 │   ├── examples/             the guide's samples + verify-examples.ps1
@@ -184,7 +184,7 @@ The charting and indicator code in `include/` and `src/` is **MIT** — see
 
 # Documentation / 文档
 
-- **[docs/目录.md](docs/目录.md)** — **文档总目录**，从这里进（中文）
+- **[docs/index.md](docs/index.md)** — **文档总目录**，从这里进（中文）
 - **[docs/development.zh.md](docs/development.zh.md)** — 开发者使用指南（中文）
 - **[docs/development.md](docs/development.md)** — developer guide (EN),
   every sample compiled and run before publication

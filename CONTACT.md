@@ -5,7 +5,7 @@ development. Please read the developer guide first so we can skip the basics.
 
 - [Developer guide (EN)](docs/development.md)
 - [开发者使用指南（中文）](docs/development.zh.md)
-- [文档总目录](docs/目录.md)
+- [文档总目录](docs/index.md)
 
 ---
 

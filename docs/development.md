@@ -1,7 +1,7 @@
 # Developer guide
 
 > 中文版：[development.zh.md](development.zh.md) ·
-> 文档总目录：[目录.md](目录.md)
+> 文档总目录：[index.md](index.md)
 
 How to put zplot into an application. Covers the whole path: building the  
 library, feeding it bars, computing indicators, turning them into vertices, and  

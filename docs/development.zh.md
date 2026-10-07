@@ -1,7 +1,7 @@
 # 开发者使用指南
 
 > English: [development.md](development.md) ·
-> 文档总目录：[目录.md](目录.md)
+> 文档总目录：[index.md](index.md)
 
 把 zplot 接进你自己的程序。覆盖完整链路：编译库、喂数据、算指标、转顶点、
 交给任意渲染器。
