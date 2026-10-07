@@ -118,14 +118,18 @@ vp.yMin = macd.yMin; vp.yMax = macd.yMax;
 // 3. triangles out
 std::vector<zplot::PlotVertex> verts;
 zplot::AppendSeries(verts, macd, vp);              // the indicator
-zplot::AppendKLine(verts, bars, priceViewport, {});// the candles, same x range -> aligned
+
+// the candles, in their own viewport but sharing the indicator's x range
+zplot::Viewport priceVp = zplot::FitViewport(bars, 0.0f, 0.0f, 800.0f, 500.0f, 400);
+zplot::KLineStyle style;
+zplot::AppendKLine(verts, bars, priceVp, style);
 
 UploadToGpu(verts.data(), verts.size());           // 24 bytes per vertex, no index buffer
 ```
 
 The default palettes are tuned for a **dark** canvas. On a light one, call
-`plot.DimForLightBackground()` once after computing — it darkens the grey/white strokes and
-leaves saturated colors alone.
+`macd.DimForLightBackground()` on each `SeriesPlot` once after computing — it darkens the
+grey/white strokes and leaves saturated colors alone.
 
 ## Building the demo
 
