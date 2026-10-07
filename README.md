@@ -198,6 +198,7 @@ The charting and indicator code in `include/` and `src/` is **MIT** — see
 - **[docs/indicators.zh.md](docs/indicators.zh.md)** ·
   **[indicators.md](docs/indicators.md)** — 59 个指标的名字、公式、默认参数与对账结果
 - **[CONTACT.md](CONTACT.md)** — contact & contract work / 联系方式与定制开发
+- **[CHANGELOG.md](CHANGELOG.md)** — release notes / 版本记录
 
 zplot is MIT and the free part stays free forever. Issues and PRs are always
 welcome.
