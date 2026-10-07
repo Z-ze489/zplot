@@ -77,7 +77,6 @@ zplot/
 │       ├── src/glad.c
 │       └── LICENSE
 ├── tools/
-│   ├── tq_fetch_kline.py     fetch minute bars into the demo's CSV format
 │   └── data/                 a sample 1-minute dataset
 ├── docs/
 │   ├── screenshot.png

@@ -13,7 +13,7 @@ development. Please read the developer guide first so we can skip the basics.
 
 **可接**
 
-- 指标移植：Pine Script / 通达信 / 文华 → C++ / Python / MT5
+- 指标移植：Pine Script / 通达信 / 文华 → C++ / MT5
 - K 线控件集成：把图表接进你现有的软件或交易终端
 - 指标口径对数：让你的实现与参考软件逐根对齐
 - CTP 行情与交易对接（**仅闲鱼 / 知乎渠道**）：基于 CTP API v6.7.11 的 C++ 封装，
@@ -42,7 +42,7 @@ development. Please read the developer guide first so we can skip the basics.
 
 **What I take on**
 
-- Indicator porting — Pine Script / TDX / WenHua formulas into C++, Python or MT5
+- Indicator porting — Pine Script / TDX / WenHua formulas into C++ or MT5
 - K-line chart widget integration into an existing app or trading terminal
 - Indicator reconciliation — proving an implementation matches a reference terminal bar for bar
 

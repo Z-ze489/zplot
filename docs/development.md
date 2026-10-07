@@ -542,8 +542,8 @@ welcome.
 If you need something built **on top of** zplot rather than inside it, I take  
 contract work:
 
-- **Indicator porting** — Pine Script, 通达信 or 文华 formulas into C++,  
-  Python, or MT5
+- **Indicator porting** — Pine Script, 通达信 or 文华 formulas into C++ or  
+  MT5
 - **K-line widget integration** — a chart wired into your existing app or  
   trading terminal
 - **Indicator reconciliation** — proving your implementation matches a  

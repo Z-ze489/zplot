@@ -12,6 +12,11 @@
 # ---- Unrelated local project ----
 /Futures_py/
 
+# ---- Local snapshot fetcher ----
+# Used by the author to pull data snapshots; not part of the library.
+/tools/tq_fetch_kline.py
+/tools/__pycache__/
+
 # ---- Build outputs ----
 /build/
 /demo/build/
